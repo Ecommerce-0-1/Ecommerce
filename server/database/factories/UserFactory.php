@@ -25,10 +25,12 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            'role_id' => 2, // Default to a non-admin role
             'email' => fake()->unique()->safeEmail(),
+            'password' => static::$password ??= Hash::make('ASas@@1234'),
+            'phone' => fake()->phoneNumber(),
+            'img' => 'https://www.pngall.com/wp-content/uploads/5/Profile-PNG-File.png',
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
         ];
     }
 
