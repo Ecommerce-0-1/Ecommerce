@@ -69,6 +69,15 @@ class User extends Authenticatable
         }
     }
 
+    protected static function show($id)
+    {
+        try {
+            return self::findorfail($id);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
