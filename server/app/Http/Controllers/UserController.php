@@ -54,4 +54,23 @@ class UserController extends Controller
             return response()->json(['error' => 'Internal Server Error', 'message' => $e->getMessage()], 500);
         }
     }
+
+    public function GoogleLogin(Request $req)
+    {
+        try {
+            $user = User::checkEmail($req->email);
+            if ($user) {
+                $user->tokens->each->delete();
+                $token = $user->createToken('token', ['*'], now()->addHours(6))->plainTextToken;
+                return response()->json(['message' => 'Loggedin Successfully', 'access_token' => $token], 200);
+            } else {
+                $register = User::GoogleLogin(['name' => $req->name, 'email' => $req->email, 'img' => $req->picture]);
+                $token = $register->createToken('token', ['*'], now()->addHours(6))->plainTextToken;
+                return response()->json(['message' => 'User Added Successfully', 'access_token' => $token], 201);
+            }
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['error' => 'Internal Server Error', 'message' => $e->getMessage()], 500);
+        }
+    }
 }
