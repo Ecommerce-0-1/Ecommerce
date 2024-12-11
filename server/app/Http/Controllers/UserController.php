@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
+    protected $firebaseUpload;
+
+    public function __construct()
+    {
+        $this->firebaseUpload = app('firebase.upload');
+    }
+
     public function register(Request $req)
     {
         try {
@@ -80,6 +87,30 @@ class UserController extends Controller
         try {
             $user = Auth::user();
             return User::show($user->id);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['error' => 'Internal Server Error', 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function update(Request $req)
+    {
+        try {
+            $user = Auth::user();
+            $validated = $req->validate([
+                'name' => 'min:3|max:30',
+                'email' => 'email|min:3|max:40',
+                'phone' => 'min:6|max:30',
+            ]);
+            $updateData = $validated;
+
+            if ($req->hasFile('img')) {
+                $img = $this->firebaseUpload->upload($req->file('img'));
+                $updateData['img'] = $img;
+            }
+            $view = User::UpdateUser($user->id, $updateData);
+
+            return response()->json(['message' => 'User Updated Successfully', 'view' => $view], 200);
         } catch (Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['error' => 'Internal Server Error', 'message' => $e->getMessage()], 500);

@@ -10,4 +10,5 @@ Route::post('/googlelogin', [UserController::class, 'GoogleLogin'])->name('Googl
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/getuser', [UserController::class, 'show']);
+    Route::post('/update_user', [UserController::class, 'update']);
 });
