@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->float('price');
-            $table->bigInteger('category_id');
+            $table->unsignedBigInteger('category_id');
             $table->bigInteger('qty');
             $table->text('img');
             $table->float('rating')->nullable();

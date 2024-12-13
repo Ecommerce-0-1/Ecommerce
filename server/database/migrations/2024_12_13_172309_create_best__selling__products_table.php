@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('best_selling_products', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('product_id');
+            $table->unsignedBigInteger('product_id');
             $table->date('month');
             $table->timestamps();
             $table->softDeletes();

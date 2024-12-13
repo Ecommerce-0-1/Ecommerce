@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id');
-            $table->bigInteger('billing_id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('billing_id');
             $table->float('total_amount');
             $table->enum('status', ['pending', 'rejected', 'completed'])->default('pending');
             $table->timestamp('order_date')->useCurrent();
