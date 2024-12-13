@@ -29,6 +29,11 @@ class User extends Authenticatable
         'email_verified_at',
     ];
 
+    public function orders()
+    {
+        return $this->hasMany(Orders::class);
+    }
+
     protected static function checkEmail($email)
     {
         try {

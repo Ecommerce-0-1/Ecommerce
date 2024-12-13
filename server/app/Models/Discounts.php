@@ -14,4 +14,9 @@ class Discounts extends Model
         'name',
         'email',
     ];
+
+    public function products()
+    {
+        return $this->belongsTo(Products::class);
+    }
 }

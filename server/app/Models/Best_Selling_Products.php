@@ -14,4 +14,9 @@ class Best_Selling_Products extends Model
         'name',
         'email',
     ];
+
+    public function products()
+    {
+        return $this->belongsTo(Products::class);
+    }
 }

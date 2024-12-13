@@ -14,4 +14,14 @@ class Order_Items extends Model
         'name',
         'email',
     ];
+
+    public function products()
+    {
+        return $this->belongsTo(Products::class);
+    }
+
+    public function orders()
+    {
+        return $this->belongsTo(Orders::class);
+    }
 }

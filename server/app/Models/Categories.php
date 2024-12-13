@@ -14,4 +14,9 @@ class Categories extends Model
         'name',
         'email',
     ];
+
+    public function products()
+    {
+        return $this->hasMany(Products::class);
+    }
 }

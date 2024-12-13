@@ -14,4 +14,9 @@ class Billing extends Model
         'name',
         'email',
     ];
+
+    public function orders()
+    {
+        return $this->hasMany(Orders::class);
+    }
 }

@@ -14,4 +14,19 @@ class Orders extends Model
         'name',
         'email',
     ];
+
+    public function users()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function billing()
+    {
+        return $this->belongsTo(Billing::class);
+    }
+
+    public function order_items()
+    {
+        return $this->hasOne(Order_Items::class);
+    }
 }
