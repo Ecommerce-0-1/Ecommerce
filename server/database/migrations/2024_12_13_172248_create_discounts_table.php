@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('discounts', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('product_id');
+            $table->float('discount_percentage');
+            $table->timestamp('start_date');
+            $table->timestamp('end_date');
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }
 

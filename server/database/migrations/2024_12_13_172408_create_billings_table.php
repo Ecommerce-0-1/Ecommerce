@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('billings', function (Blueprint $table) {
             $table->id();
+            $table->string('company_name')->nullable();
+            $table->string('address');
+            $table->string('floor');
+            $table->string('city');
+            $table->bigInteger('phone');
+            $table->string('email');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

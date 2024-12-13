@@ -11,9 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('best__selling__products', function (Blueprint $table) {
+        Schema::create('best_selling_products', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('product_id');
+            $table->date('month');
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }
 
@@ -22,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('best__selling__products');
+        Schema::dropIfExists('best_selling_products');
     }
 };
