@@ -13,7 +13,16 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('billing_id');
+            $table->float('total_amount');
+            $table->enum('status', ['pending', 'rejected', 'completed'])->default('pending');
+            $table->timestamp('order_date')->useCurrent();
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('billing_id')->references('id')->on('billings')->onDelete('cascade');
         });
     }
 
