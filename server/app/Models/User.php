@@ -94,6 +94,16 @@ class User extends Authenticatable
         }
     }
 
+    protected static function DeleteUser($id)
+    {
+        try {
+            return self::findorfail($id)
+                ->delete();
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
