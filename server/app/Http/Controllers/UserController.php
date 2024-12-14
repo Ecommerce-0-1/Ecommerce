@@ -116,4 +116,20 @@ class UserController extends Controller
             return response()->json(['error' => 'Internal Server Error', 'message' => $e->getMessage()], 500);
         }
     }
+
+    public function destroy()
+    {
+        try {
+            $user = Auth::user();
+            if ($user) {
+                User::DeleteUser($user->id);
+                return response()->json(['message' => 'User Deleted Successfully'], 200);
+            } else {
+                return response()->json(['message' => 'Unauthorized'], 401);
+            }
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['error' => 'Internal Server Error', 'message' => $e->getMessage()], 500);
+        }
+    }
 }
