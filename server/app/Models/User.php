@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
@@ -29,7 +30,7 @@ class User extends Authenticatable
         'email_verified_at',
     ];
 
-    public function orders()
+    public function orders(): HasMany
     {
         return $this->hasMany(Orders::class);
     }
