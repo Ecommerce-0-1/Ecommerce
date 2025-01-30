@@ -18,6 +18,7 @@ class Products extends Model
         'name',
         'description',
         'price',
+        'units_sold',
         'category_id',
         'qty',
         'img',
@@ -29,6 +30,22 @@ class Products extends Model
         return $this->belongsTo(Categories::class);
     }
 
+    public function discount(): HasOne
+    {
+        return $this->hasOne(Discounts::class);
+    }
+
+    public function best_selling(): HasOne
+    {
+        return $this->hasOne(Best_Selling_Products::class);
+    }
+
+    public function order_items(): HasMany
+    {
+        return $this->hasMany(Order_Items::class);
+    }
+
+    // CRUD Operation For Products table
     protected static function CreateProduct($product)
     {
         try {
@@ -92,19 +109,6 @@ class Products extends Model
             throw $e;
         }
     }
-
-    public function discount(): HasOne
-    {
-        return $this->hasOne(Discounts::class);
-    }
-
-    public function best_selling(): HasOne
-    {
-        return $this->hasOne(Best_Selling_Products::class);
-    }
-
-    public function order_items(): HasMany
-    {
-        return $this->hasMany(Order_Items::class);
-    }
+    // End CRUD Operation For Products table
 }
+
