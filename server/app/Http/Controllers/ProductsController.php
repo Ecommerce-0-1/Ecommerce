@@ -51,7 +51,7 @@ class ProductsController extends Controller
                 'products.*.name' => 'required|string|max:255|unique:products,name',
                 'products.*.description' => 'required|string',
                 'products.*.price' => 'required|numeric',
-                'products.*.units_sold' => 'nullable|integer|mine:0',
+                'products.*.units_sold' => 'nullable|integer|min:0',
                 'products.*.category_id' => 'required|exists:categories,id',
                 'products.*.qty' => 'required|integer',
                 'products.*.img' => 'required|string',
