@@ -11,13 +11,10 @@ class Discounts extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'discounts';
-    protected $fillable = [
-        'name',
-        'email',
-    ];
+    protected $fillable = ['product_id', 'discount_percentage'];
 
     public function products(): BelongsTo
     {
-        return $this->belongsTo(Products::class);
+        return $this->belongsTo(Products::class, 'product_id');
     }
 }
