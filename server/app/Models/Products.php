@@ -179,11 +179,21 @@ class Products extends Model
     {
         $discount = $product->discount()->first();
 
+        // Calculate the final price of the product based on the discount
+        $OriginalPrice = $product->price;
+        $FinalPrice = $OriginalPrice - (($discountPercentage / 100) * $OriginalPrice);
+
         // If there is a Discount for the product : update it, else : create it
         if ($discount) {
-            $discount->update(['discount_percentage' => $discountPercentage]);
+            $discount->update([
+                'discount_percentage' => $discountPercentage,
+                'final_price'         => $FinalPrice
+            ]);
         } else {
-            $product->discount()->create(['discount_percentage' => $discountPercentage]);
+            $product->discount()->create([
+                'discount_percentage' => $discountPercentage,
+                'final_price'         => $FinalPrice
+            ]);
         }
     }
     // End discount Logic for Products
