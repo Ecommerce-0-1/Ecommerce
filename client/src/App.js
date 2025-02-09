@@ -1,24 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { reactQueryClientOptions } from "./configs/reactQueryClientOptions";
+import ReactPublicContextProvider from "./providers/PublicContextProvider"
+import ToastifyProvider from "./providers/ToastifyProvider"
+import LoadingProvider from "./providers/LoadingProvider"
+import Index from "./pages/index";
+const queryClient = new QueryClient(reactQueryClientOptions);
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <QueryClientProvider client={queryClient}>
+    <ReactQueryDevtools initialIsOpen={false} />
+    <ReactPublicContextProvider>
+      <ToastifyProvider>
+        <LoadingProvider>
+          <Index />
+        </LoadingProvider>
+      </ToastifyProvider>
+    </ReactPublicContextProvider>
+  </QueryClientProvider>
   );
 }
 
