@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 const SHAPE_STYLES = {
   1: "bg-secondary_5 text-custom-3xl text-primary_2 border border-solid border-secondary_3 rounded-[53px] removeInputIcon",
   2: "bg-primary_4 text-4 text-primary_2 border border-solid border-secondary_3 rounded-custom-16 ps-6 pt-[2rem] removeInputIcon",
-  3: "border border-gray-300 rounded-md p-2 inline-block",
+  // For Search 
+  3: "w-[250px] p-2 rounded-md bg-[#F5F5F5] inline-block ",
 };
 
 export default function CustomInput({
@@ -29,6 +30,7 @@ export default function CustomInput({
   const focusClass = withFocus
     ? "focus:outline-primary_1 transition-all duration-200"
     : "outline-none";
+    
   const shapeClass = SHAPE_STYLES[shape] || 2;
 
   return (
