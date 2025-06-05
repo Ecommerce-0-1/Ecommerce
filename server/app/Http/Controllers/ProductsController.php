@@ -57,11 +57,11 @@ class ProductsController extends Controller
                 'products.*.img' => 'required|string',
                 'products.*.rating' => 'nullable|numeric',
             ]);
-            
+
 
             $createdProducts = Products::CreateMultipleProducts($validateData['products']);
 
-            DB::commit(); 
+            DB::commit();
 
             return response()->json([
                 'success' => true,

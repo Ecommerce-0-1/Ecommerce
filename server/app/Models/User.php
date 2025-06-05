@@ -35,6 +35,11 @@ class User extends Authenticatable
         return $this->hasMany(Orders::class);
     }
 
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
     protected static function checkEmail($email)
     {
         try {

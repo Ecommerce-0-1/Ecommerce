@@ -79,7 +79,7 @@ class DiscountsController extends Controller
     function destroy($id)
     {
         try {
-           Discounts::DeleteDiscount($id);
+            Discounts::DeleteDiscount($id);
 
             return response()->json([
                 'success' => true,
