@@ -37,7 +37,7 @@ class Products extends Model
 
     public function best_selling(): HasOne
     {
-        return $this->hasOne(Best_Selling_Products::class);
+        return $this->hasOne(Best_Selling_Products::class, 'product_id');
     }
 
     public function order_items(): HasMany
