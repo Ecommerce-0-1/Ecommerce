@@ -8,8 +8,64 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @OA\Tag(
+ *     name="Products",
+ *     description="API Endpoints for Product management"
+ * )
+ */
 class ProductsController extends Controller
 {
+    /**
+     * @OA\Post(
+     *     path="/api/products/create",
+     *     summary="Create a new product",
+     *     description="Create a new product in the system",
+     *     tags={"Products"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name","description","price","category_id","qty","img"},
+     *             @OA\Property(property="name", type="string", example="iPhone 15", description="Product name"),
+     *             @OA\Property(property="description", type="string", example="Latest iPhone model", description="Product description"),
+     *             @OA\Property(property="price", type="number", format="float", example=999.99, description="Product price"),
+     *             @OA\Property(property="units_sold", type="integer", example=0, description="Units sold"),
+     *             @OA\Property(property="category_id", type="integer", example=1, description="Category ID"),
+     *             @OA\Property(property="qty", type="integer", example=10, description="Available quantity"),
+     *             @OA\Property(property="img", type="string", example="iphone15.jpg", description="Product image URL"),
+     *             @OA\Property(property="rating", type="number", format="float", example=4.5, description="Product rating")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Product created successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Product created successfully"),
+     *             @OA\Property(property="product", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="error", type="string", example="Validation failed"),
+     *             @OA\Property(property="message", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="error", type="string", example="Failed to create Products"),
+     *             @OA\Property(property="message", type="string", example="Internal Server Error")
+     *         )
+     *     )
+     * )
+     */
     function store(Request $request)
     {
         try {

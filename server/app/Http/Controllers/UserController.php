@@ -8,6 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * @OA\Tag(
+ *     name="Authentication",
+ *     description="API Endpoints for user authentication and management"
+ * )
+ */
 class UserController extends Controller
 {
     protected $firebaseUpload;
@@ -17,6 +23,55 @@ class UserController extends Controller
         $this->firebaseUpload = app('firebase.upload');
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/user/register",
+     *     summary="Register a new user",
+     *     description="Create a new user account",
+     *     tags={"Authentication"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name","email","password","phone"},
+     *             @OA\Property(property="name", type="string", example="John Doe", description="User's full name"),
+     *             @OA\Property(property="email", type="string", format="email", example="john@example.com", description="User's email address"),
+     *             @OA\Property(property="password", type="string", example="password123", description="User's password"),
+     *             @OA\Property(property="phone", type="string", example="+1234567890", description="User's phone number")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="User registered successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="User Added Successfully"),
+     *             @OA\Property(property="access_token", type="string", example="1|abc123...")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Email already exists",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="Email Already Exists")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string"),
+     *             @OA\Property(property="errors", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="Internal Server Error"),
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     )
+     * )
+     */
     public function register(Request $req)
     {
         try {
@@ -40,6 +95,53 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/user/login",
+     *     summary="User login",
+     *     description="Authenticate user and return access token",
+     *     tags={"Authentication"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email","password"},
+     *             @OA\Property(property="email", type="string", format="email", example="john@example.com", description="User's email address"),
+     *             @OA\Property(property="password", type="string", example="password123", description="User's password")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Login successful",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Loggedin Successfully"),
+     *             @OA\Property(property="access_token", type="string", example="1|abc123...")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid credentials",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Invalid Email or Password")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string"),
+     *             @OA\Property(property="errors", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="Internal Server Error"),
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     )
+     * )
+     */
     public function login(Request $req)
     {
         try {

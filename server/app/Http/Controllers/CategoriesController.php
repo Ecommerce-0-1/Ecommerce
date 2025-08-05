@@ -8,6 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * @OA\Tag(
+ *     name="Categories",
+ *     description="API Endpoints for Category management"
+ * )
+ */
 class CategoriesController extends Controller
 {
     function store(Request $request)
