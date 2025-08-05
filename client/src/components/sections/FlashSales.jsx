@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { FiArrowRight } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import ProductCard from "../ui/ProductCard";
-import { getDiscountedProducts } from "../../queries/getQueryFns";
+import { getDiscountedProducts } from "../../queries/discountsQueryFns";
 import { Oval } from "react-loader-spinner";
 
 const FlashSales = () => {
