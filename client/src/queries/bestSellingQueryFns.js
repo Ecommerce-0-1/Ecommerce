@@ -7,7 +7,7 @@ import { get, post, del } from "../configs/api";
 // GET - Fetch all best selling products
 export const getBestSellingProducts = async () => {
   try {
-    const response = await get('/bsp/get');
+    const response = await get('/api/bsp/get');
     return response;
   } catch (error) {
     throw error;
@@ -17,7 +17,7 @@ export const getBestSellingProducts = async () => {
 // GET - Fetch single best selling product by ID
 export const getBestSellingProductById = async (id) => {
   try {
-    const response = await get(`/bsp/get/${id}`);
+    const response = await get(`/api/bsp/get/${id}`);
     return response;
   } catch (error) {
     throw error;
@@ -27,7 +27,7 @@ export const getBestSellingProductById = async (id) => {
 // GET - Fetch best selling products by month
 export const getBestSellingProductsByMonth = async () => {
   try {
-    const response = await get('/bsp/month');
+    const response = await get('/api/bsp/month');
     return response;
   } catch (error) {
     throw error;
@@ -37,7 +37,7 @@ export const getBestSellingProductsByMonth = async () => {
 // POST - Create best selling product record (Admin only)
 export const createBestSellingProduct = async (productData) => {
   try {
-    const response = await post('/ctgy/create', productData);
+    const response = await post('/api/ctgy/create', productData);
     return response;
   } catch (error) {
     throw error;
@@ -47,7 +47,7 @@ export const createBestSellingProduct = async (productData) => {
 // POST - Update best selling product record (Admin only)
 export const updateBestSellingProduct = async (id, productData) => {
   try {
-    const response = await post(`/ctgy/update/${id}`, productData);
+    const response = await post(`/api/ctgy/update/${id}`, productData);
     return response;
   } catch (error) {
     throw error;
@@ -57,7 +57,7 @@ export const updateBestSellingProduct = async (id, productData) => {
 // DELETE - Delete best selling product record (Admin only)
 export const deleteBestSellingProduct = async (id) => {
   try {
-    const response = await del(`/ctgy/delete/${id}`);
+    const response = await del(`/api/ctgy/delete/${id}`);
     return response;
   } catch (error) {
     throw error;
