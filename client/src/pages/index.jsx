@@ -5,6 +5,7 @@ import Signup from "./website/Auth/SignUp";
 import NotFound from "./website/NotFound";
 import UnAuthorized from "./website/Unauthorized";
 import Home from "./website/Home";
+import ProductDetails from "./website/ProductDetails";
 import TopNav from "./shared/TopNav";
 
 export default function Index() {
