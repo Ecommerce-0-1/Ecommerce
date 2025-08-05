@@ -9,7 +9,7 @@ import { get, post, put, del } from "../configs/api";
 // GET - Fetch user's orders
 export const getUserOrders = async () => {
   try {
-    const response = await get('/orders/user');
+    const response = await get('/api/orders/user');
     return response;
   } catch (error) {
     throw error;
@@ -19,7 +19,7 @@ export const getUserOrders = async () => {
 // POST - Create new order
 export const createOrder = async (orderData) => {
   try {
-    const response = await post('/orders/create', orderData);
+    const response = await post('/api/orders/create', orderData);
     return response;
   } catch (error) {
     throw error;
@@ -31,7 +31,7 @@ export const createOrder = async (orderData) => {
 // GET - Fetch all orders (Admin only)
 export const getAllOrders = async () => {
   try {
-    const response = await get('/orders/all');
+    const response = await get('/api/orders/all');
     return response;
   } catch (error) {
     throw error;
@@ -41,7 +41,7 @@ export const getAllOrders = async () => {
 // GET - Fetch single order by ID (Admin only)
 export const getOrderById = async (id) => {
   try {
-    const response = await get(`/orders/${id}`);
+    const response = await get(`/api/orders/${id}`);
     return response;
   } catch (error) {
     throw error;
@@ -51,7 +51,7 @@ export const getOrderById = async (id) => {
 // GET - Fetch orders by status (Admin only)
 export const getOrdersByStatus = async (status) => {
   try {
-    const response = await get(`/orders/status/${status}`);
+    const response = await get(`/api/orders/status/${status}`);
     return response;
   } catch (error) {
     throw error;
@@ -61,7 +61,7 @@ export const getOrdersByStatus = async (status) => {
 // GET - Fetch order statistics (Admin only)
 export const getOrderStatistics = async () => {
   try {
-    const response = await get('/orders/statistics');
+    const response = await get('/api/orders/statistics');
     return response;
   } catch (error) {
     throw error;
@@ -71,7 +71,7 @@ export const getOrderStatistics = async () => {
 // PUT - Update order (Admin only)
 export const updateOrder = async (id, orderData) => {
   try {
-    const response = await put(`/orders/update/${id}`, orderData);
+    const response = await put(`/api/orders/update/${id}`, orderData);
     return response;
   } catch (error) {
     throw error;
@@ -81,7 +81,7 @@ export const updateOrder = async (id, orderData) => {
 // DELETE - Delete order (Admin only)
 export const deleteOrder = async (id) => {
   try {
-    const response = await del(`/orders/delete/${id}`);
+    const response = await del(`/api/orders/delete/${id}`);
     return response;
   } catch (error) {
     throw error;
