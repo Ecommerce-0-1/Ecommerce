@@ -7,7 +7,7 @@ import { get, post, patch, del } from "../configs/api";
 // GET - Fetch all products
 export const getAllProducts = async () => {
   try {
-    const response = await get('/api/products/get');
+    const response = await get('/products/get');
     return response;
   } catch (error) {
     throw error;
@@ -17,7 +17,7 @@ export const getAllProducts = async () => {
 // GET - Fetch single product by ID
 export const getProductById = async (id) => {
   try {
-    const response = await get(`/api/products/get/${id}`);
+    const response = await get(`/products/get/${id}`);
     return response;
   } catch (error) {
     throw error;
@@ -27,7 +27,7 @@ export const getProductById = async (id) => {
 // POST - Create new product (Admin only)
 export const createProduct = async (productData) => {
   try {
-    const response = await post('/api/products/create', productData);
+    const response = await post('/products/create', productData);
     return response;
   } catch (error) {
     throw error;
@@ -37,7 +37,7 @@ export const createProduct = async (productData) => {
 // POST - Create multiple products (Admin only)
 export const createMultipleProducts = async (productsData) => {
   try {
-    const response = await post('/api/products/bulk-create', { products: productsData });
+    const response = await post('/products/bulk-create', { products: productsData });
     return response;
   } catch (error) {
     throw error;
@@ -47,7 +47,7 @@ export const createMultipleProducts = async (productsData) => {
 // PATCH - Update product (Admin only)
 export const updateProduct = async (id, productData) => {
   try {
-    const response = await patch(`/api/products/update/${id}`, productData);
+    const response = await patch(`/products/update/${id}`, productData);
     return response;
   } catch (error) {
     throw error;
@@ -57,7 +57,7 @@ export const updateProduct = async (id, productData) => {
 // DELETE - Delete product (Admin only)
 export const deleteProduct = async (id) => {
   try {
-    const response = await del(`/api/products/delete/${id}`);
+    const response = await del(`/products/delete/${id}`);
     return response;
   } catch (error) {
     throw error;
