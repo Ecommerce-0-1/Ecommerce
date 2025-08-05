@@ -9,7 +9,7 @@ import { get, post, put, del } from "../configs/api";
 // GET - Fetch user's order items
 export const getUserOrderItems = async () => {
   try {
-    const response = await get('/order-items/user');
+    const response = await get('/api/order-items/user');
     return response;
   } catch (error) {
     throw error;
@@ -19,7 +19,7 @@ export const getUserOrderItems = async () => {
 // POST - Create new order item
 export const createOrderItem = async (orderItemData) => {
   try {
-    const response = await post('/order-items/create', orderItemData);
+    const response = await post('/api/order-items/create', orderItemData);
     return response;
   } catch (error) {
     throw error;
@@ -29,7 +29,7 @@ export const createOrderItem = async (orderItemData) => {
 // PUT - Update order item
 export const updateOrderItem = async (id, orderItemData) => {
   try {
-    const response = await put(`/order-items/update/${id}`, orderItemData);
+    const response = await put(`/api/order-items/update/${id}`, orderItemData);
     return response;
   } catch (error) {
     throw error;
@@ -39,7 +39,7 @@ export const updateOrderItem = async (id, orderItemData) => {
 // DELETE - Delete order item
 export const deleteOrderItem = async (id) => {
   try {
-    const response = await del(`/order-items/delete/${id}`);
+    const response = await del(`/api/order-items/delete/${id}`);
     return response;
   } catch (error) {
     throw error;
@@ -51,7 +51,7 @@ export const deleteOrderItem = async (id) => {
 // GET - Fetch all order items (Admin only)
 export const getAllOrderItems = async () => {
   try {
-    const response = await get('/order-items/all');
+    const response = await get('/api/order-items/all');
     return response;
   } catch (error) {
     throw error;
@@ -61,7 +61,7 @@ export const getAllOrderItems = async () => {
 // GET - Fetch single order item by ID (Admin only)
 export const getOrderItemById = async (id) => {
   try {
-    const response = await get(`/order-items/get/${id}`);
+    const response = await get(`/api/order-items/get/${id}`);
     return response;
   } catch (error) {
     throw error;
@@ -71,7 +71,7 @@ export const getOrderItemById = async (id) => {
 // GET - Fetch order items by order ID (Admin only)
 export const getOrderItemsByOrderId = async (orderId) => {
   try {
-    const response = await get(`/order-items/order/${orderId}`);
+    const response = await get(`/api/order-items/order/${orderId}`);
     return response;
   } catch (error) {
     throw error;
