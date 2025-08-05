@@ -5,6 +5,7 @@ import Signup from "./website/Auth/SignUp";
 import NotFound from "./website/NotFound";
 import UnAuthorized from "./website/Unauthorized";
 import Home from "./website/Home";
+import ProductDetails from "./website/ProductDetails";
 import TopNav from "./shared/TopNav";
 
 export default function Index() {
@@ -15,9 +16,9 @@ export default function Index() {
       <Routes>
         <Route path="/login" element={<Login/>} />
         <Route path="/signup" element={<Signup/>} />
+        <Route path="/product/:id" element={<ProductDetails/>} />
         <Route path="/unauthorized" element={<UnAuthorized />} />
         <Route path="*" element={<NotFound />} />
-
 
         <Route path="/" element={<Home/>} />
       </Routes>
