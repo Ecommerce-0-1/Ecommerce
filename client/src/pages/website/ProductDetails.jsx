@@ -2,7 +2,7 @@ import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { FiArrowLeft, FiStar, FiShoppingCart, FiHeart } from "react-icons/fi";
-import { getProductById } from "../../queries/getQueryFns";
+import { getProductById } from "../../queries/productsQueryFns";
 import { Oval } from "react-loader-spinner";
 
 const ProductDetails = () => {
