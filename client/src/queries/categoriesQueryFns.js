@@ -7,7 +7,7 @@ import { get, post, patch, del } from "../configs/api";
 // GET - Fetch all categories
 export const getAllCategories = async () => {
   try {
-    const response = await get('/ctgy/get');
+    const response = await get('/api/ctgy/get');
     return response;
   } catch (error) {
     throw error;
@@ -17,7 +17,7 @@ export const getAllCategories = async () => {
 // GET - Fetch single category by ID
 export const getCategoryById = async (id) => {
   try {
-    const response = await get(`/ctgy/get/${id}`);
+    const response = await get(`/api/ctgy/get/${id}`);
     return response;
   } catch (error) {
     throw error;
@@ -27,7 +27,7 @@ export const getCategoryById = async (id) => {
 // POST - Create new category (Admin only)
 export const createCategory = async (categoryData) => {
   try {
-    const response = await post('/ctgy/create', categoryData);
+    const response = await post('/api/ctgy/create', categoryData);
     return response;
   } catch (error) {
     throw error;
@@ -37,7 +37,7 @@ export const createCategory = async (categoryData) => {
 // POST - Update category (Admin only)
 export const updateCategory = async (id, categoryData) => {
   try {
-    const response = await post(`/ctgy/update/${id}`, categoryData);
+    const response = await post(`/api/ctgy/update/${id}`, categoryData);
     return response;
   } catch (error) {
     throw error;
@@ -47,7 +47,7 @@ export const updateCategory = async (id, categoryData) => {
 // DELETE - Delete category (Admin only)
 export const deleteCategory = async (id) => {
   try {
-    const response = await del(`/ctgy/delete/${id}`);
+    const response = await del(`/api/ctgy/delete/${id}`);
     return response;
   } catch (error) {
     throw error;
