@@ -42,17 +42,17 @@ const TopNav = () => {
   ].filter((item) => item);
 
   return (
-    <div className="mx-auto flex h-24 max-w-[1980px] items-center px-4 border-b-2">
-      <h1 className="text-custom-3xl font-custom-bold text-primary">
-        Eccomerce
+    <div className="mx-auto flex h-24 max-w-[1980px] items-center px-6 border-b-2">
+      <h1 className="text-custom-3xl font-custom-bold text-primary mr-8">
+        Ecommerce
       </h1>
 
       {/* Desktop Navigation */}
-      <ul className="hidden md:flex flex-grow justify-center items-center">
+      <ul className="hidden md:flex flex-grow justify-center items-center space-x-8">
         {navItems?.map((item) => (
           <li
             key={item?.id}
-            className={`group relative m-6 cursor-pointer p-3 font-custom-medium duration-400 ${
+            className={`group relative cursor-pointer px-4 py-2 font-custom-medium duration-400 ${
               item?.path && location?.pathname === item.path
                 ? "border-b-2 border-b-primary"
                 : ""
@@ -69,7 +69,7 @@ const TopNav = () => {
         ))}
       </ul>
 
-      <div className="flex items-center xxsm:mx-auto xxsm:gap-12 sm:gap-20 md:gap-16 lg:m-10">
+      <div className="flex items-center gap-4 ml-auto">
         {/* Search Input */}
         <div className="hidden lg:block">
           <CustomInput
