@@ -7,7 +7,7 @@ import { get, post, del } from "../configs/api";
 // POST - User registration
 export const registerUser = async (userData) => {
   try {
-    const response = await post('/user/register', userData);
+    const response = await post('/api/user/register', userData);
     return response;
   } catch (error) {
     throw error;
@@ -17,7 +17,7 @@ export const registerUser = async (userData) => {
 // POST - User login
 export const loginUser = async (credentials) => {
   try {
-    const response = await post('/user/login', credentials);
+    const response = await post('/api/user/login', credentials);
     return response;
   } catch (error) {
     throw error;
