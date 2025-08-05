@@ -13,6 +13,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('discount:apply')->daily();
+
+        $schedule->command('best-sellers:snapshot --top=10')
+             ->monthlyOn(1, '00:05');
     }
 
     /**

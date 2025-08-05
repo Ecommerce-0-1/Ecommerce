@@ -38,6 +38,7 @@ class RouteServiceProvider extends ServiceProvider
                     require base_path('routes/Api/CategoriesRoute.php');
                     require base_path('routes/Api/ProductsRoute.php');
                     require base_path('routes/Api/DiscountsRoute.php');
+                    require base_path('routes/Api/BestSellingProductsRoute.php');
                 });
 
             Route::prefix('api')
