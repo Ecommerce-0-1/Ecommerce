@@ -27,7 +27,7 @@ export const loginUser = async (credentials) => {
 // POST - Google login
 export const googleLogin = async (googleData) => {
   try {
-    const response = await post('/user/googlelogin', googleData);
+    const response = await post('/api/user/googlelogin', googleData);
     return response;
   } catch (error) {
     throw error;
@@ -37,7 +37,7 @@ export const googleLogin = async (googleData) => {
 // GET - Get user profile (Admin only)
 export const getUserProfile = async () => {
   try {
-    const response = await get('/user/get');
+    const response = await get('/api/user/get');
     return response;
   } catch (error) {
     throw error;
@@ -47,7 +47,7 @@ export const getUserProfile = async () => {
 // POST - Update user profile (Admin only)
 export const updateUserProfile = async (userData) => {
   try {
-    const response = await post('/user/update', userData);
+    const response = await post('/api/user/update', userData);
     return response;
   } catch (error) {
     throw error;
@@ -57,7 +57,7 @@ export const updateUserProfile = async (userData) => {
 // DELETE - Delete user account (Admin only)
 export const deleteUserAccount = async () => {
   try {
-    const response = await del('/user/delete');
+    const response = await del('/api/user/delete');
     return response;
   } catch (error) {
     throw error;
