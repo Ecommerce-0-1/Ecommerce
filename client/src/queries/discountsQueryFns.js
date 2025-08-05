@@ -7,7 +7,7 @@ import { get, patch, del } from "../configs/api";
 // GET - Fetch all discounted products
 export const getDiscountedProducts = async () => {
   try {
-    const response = await get('/api/discounts/get');
+    const response = await get('/discounts/get');
     return response;
   } catch (error) {
     throw error;
@@ -17,7 +17,7 @@ export const getDiscountedProducts = async () => {
 // GET - Fetch single discount by ID
 export const getDiscountById = async (id) => {
   try {
-    const response = await get(`/api/discounts/get/${id}`);
+    const response = await get(`/discounts/get/${id}`);
     return response;
   } catch (error) {
     throw error;
@@ -27,7 +27,7 @@ export const getDiscountById = async (id) => {
 // PATCH - Update discount (Admin only)
 export const updateDiscount = async (id, discountData) => {
   try {
-    const response = await patch(`/api/discounts/update/${id}`, discountData);
+    const response = await patch(`/discounts/update/${id}`, discountData);
     return response;
   } catch (error) {
     throw error;
@@ -37,7 +37,7 @@ export const updateDiscount = async (id, discountData) => {
 // DELETE - Delete discount (Admin only)
 export const deleteDiscount = async (id) => {
   try {
-    const response = await del(`/api/discounts/delete/${id}`);
+    const response = await del(`/discounts/delete/${id}`);
     return response;
   } catch (error) {
     throw error;
