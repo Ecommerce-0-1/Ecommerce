@@ -3,8 +3,7 @@ import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { usePublicContext } from "../../../providers/PublicContextProvider";
 import { deleteUserCookies } from "../../../utils/methods";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   // State to manage the TopNav's visibility

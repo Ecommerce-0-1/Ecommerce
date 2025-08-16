@@ -84,7 +84,7 @@ class Products extends Model
     protected static function GetProductById($id)
     {
         try {
-            return self::findorfail($id);
+            return self::with('category')->findorfail($id);
         } catch (Exception $e) {
             throw $e;
         }

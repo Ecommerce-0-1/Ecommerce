@@ -1,4 +1,4 @@
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer } from "react-toastify";
 
 export default function ToastifyProvider({ children }) {
   return (
@@ -6,7 +6,7 @@ export default function ToastifyProvider({ children }) {
       {children}
       <ToastContainer
         richColors
-        position='top-right'
+        position="top-right"
         autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
@@ -15,6 +15,8 @@ export default function ToastifyProvider({ children }) {
         pauseOnFocusLoss
         draggable
         pauseOnHover
+        limit={5}
+        enableMultiContainer={false}
       />
     </>
   );

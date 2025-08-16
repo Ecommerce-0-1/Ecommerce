@@ -28,6 +28,7 @@ class User extends Authenticatable
         'phone',
         'img',
         'email_verified_at',
+        'stripe_customer_id',
     ];
 
     public function orders(): HasMany

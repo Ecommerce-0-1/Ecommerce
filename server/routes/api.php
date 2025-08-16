@@ -14,6 +14,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+// Test route to verify API is working
+Route::get('/test', function () {
+    return response()->json([
+        'message' => 'API is working!',
+        'timestamp' => now(),
+        'version' => '1.0.0'
+    ]);
+});
+
+// Include all API route files
+require __DIR__ . '/Api/OrdersRoute.php';
+require __DIR__ . '/Api/OrderItemsRoute.php';
+require __DIR__ . '/Api/ProductsRoute.php';
+require __DIR__ . '/Api/UsersRoute.php';
+require __DIR__ . '/Api/DiscountsRoute.php';
+require __DIR__ . '/Api/CategoriesRoute.php';
+require __DIR__ . '/Api/PaymentRoute.php';
+require __DIR__ . '/Api/WishlistRoute.php';

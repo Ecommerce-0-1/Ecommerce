@@ -73,7 +73,7 @@ class ProductsController extends Controller
                 'name' => 'required|string|max:255|unique:products,name',
                 'description' => 'required|string',
                 'price' => 'required|numeric',
-                'units_sold' => 'nullable|integer|mine:0',
+                'units_sold' => 'nullable|integer|min:0',
                 'category_id' => 'required|exists:categories,id',
                 'qty' => 'required|integer',
                 'img' => 'required|string',
@@ -161,14 +161,14 @@ class ProductsController extends Controller
     {
         try {
             validator(['id' => $id], [
-                'id' => 'required|integer|exists:categories,id'
+                'id' => 'required|integer|exists:products,id'
             ])->validate();
 
             $product = Products::GetProductById($id);
             return response()->json([
                 'success' => true,
                 'message' => 'Product retrieved By ID successfully',
-                'category' => $product
+                'product' => $product
             ], 200);
         } catch (Exception $e) {
             Log::error('Product retrieval by id error: ' . $e->getMessage());
@@ -192,7 +192,7 @@ class ProductsController extends Controller
                 'name' => 'nullable|string|max:255|unique:products,name',
                 'description' => 'nullable|string',
                 'price' => 'nullable|numeric',
-                'units_sold' => 'nullable|integer|mine:0',
+                'units_sold' => 'nullable|integer|min:0',
                 'category_id' => 'nullable|exists:categories,id',
                 'qty' => 'nullable|integer',
                 'img' => 'nullable|string',

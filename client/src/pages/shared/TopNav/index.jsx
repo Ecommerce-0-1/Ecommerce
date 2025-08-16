@@ -2,9 +2,9 @@ import { useState } from "react";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { usePublicContext } from "../../../providers/PublicContextProvider";
+import { useCart } from "../../../providers/CartProvider";
 import { deleteUserCookies } from "../../../utils/methods";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import "../../../App.css";
 import CustomInput from "../../../components/ui/custom-inputs/CustomInput";
 import {
@@ -19,6 +19,7 @@ const TopNav = () => {
   const [nav, setNav] = useState(false);
 
   const { isLog } = usePublicContext();
+  const { getCartCount } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -48,92 +49,92 @@ const TopNav = () => {
       </h1>
 
       {/* Desktop Navigation */}
-      <ul className="hidden md:flex flex-grow justify-center items-center space-x-8">
-        {navItems?.map((item) => (
-          <li
-            key={item?.id}
-            className={`group relative cursor-pointer px-4 py-2 font-custom-medium duration-400 ${
-              item?.path && location?.pathname === item.path
-                ? "border-b-2 border-b-primary"
-                : ""
-            }`}
-          >
-            {item?.path ? (
-              <Link to={item?.path}>{item?.text}</Link>
-            ) : (
-              <button onClick={item?.onClick}>{item?.text}</button>
-            )}
-            {/* Underline span */}
-            <span className="absolute bottom-0 left-0 h-0.5 bg-primary w-0 transition-all duration-400 group-hover:w-full" />
-          </li>
-        ))}
-      </ul>
+      <nav className="hidden md:flex">
+        <ul className="flex items-center space-x-8">
+          {navItems.map((item) => (
+            <li key={item.id}>
+              {item.onClick ? (
+                <button
+                  onClick={item.onClick}
+                  className="text-button hover:text-buttonHover duration-300"
+                >
+                  {item.text}
+                </button>
+              ) : (
+                <Link
+                  to={item.path}
+                  className={`text-button hover:text-buttonHover duration-300 ${
+                    location.pathname === item.path ? "text-primary" : ""
+                  }`}
+                >
+                  {item.text}
+                </Link>
+              )}
+            </li>
+          ))}
+        </ul>
+      </nav>
 
-      <div className="flex items-center gap-4 ml-auto">
-        {/* Search Input */}
-        <div className="hidden lg:block">
+      {/* Search Bar */}
+      <div className="flex-1 max-w-md mx-8">
+        <div className="relative">
+          <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <CustomInput
-            className=""
-            placeholder="What are you looking for?"
-            shape={3}
-            icon={
-              <FiSearch
-                className="cursor-pointer"
-                size={20}
-                cursor={true}
-                onClick={() => {
-                  alert("soon !");
-                }}
-              />
-            }
+            type="text"
+            placeholder="Search products..."
+            className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           />
         </div>
-
-        {/* Right Section Icons  */}
-        {isLog ? (
-          <>
-            <div>
-              <FiHeart
-                className="cursor-pointer"
-                size={20}
-                onClick={() => {
-                  alert("soon !");
-                }}
-              />
-            </div>
-            <div>
-              <FiShoppingCart
-                className="cursor-pointer"
-                size={20}
-                onClick={() => {
-                  alert("soon !");
-                }}
-              />
-            </div>
-            <div>
-              <FiUser
-                className="cursor-pointer"
-                size={20}
-                onClick={() => {
-                  alert("soon !");
-                }}
-              />
-            </div>
-          </>
-        ) : (
-          <>
-            <div>
-              <FiShoppingCart
-                className="cursor-pointer"
-                size={20}
-                onClick={() => {
-                  alert("soon !");
-                }}
-              />
-            </div>
-          </>
-        )}
       </div>
+
+      {/* Right Section Icons  */}
+      {isLog ? (
+        <>
+          <div>
+            <FiHeart
+              className="cursor-pointer"
+              size={20}
+              onClick={() => {
+                alert("soon !");
+              }}
+            />
+          </div>
+          <div className="relative">
+            <FiShoppingCart
+              className="cursor-pointer"
+              size={20}
+              onClick={() => navigate("/cart")}
+            />
+            {getCartCount() > 0 && (
+              <span className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {getCartCount() > 99 ? "99+" : getCartCount()}
+              </span>
+            )}
+          </div>
+          <div>
+            <FiUser
+              className="cursor-pointer"
+              size={20}
+              onClick={() => navigate("/profile")}
+            />
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="relative">
+            <FiShoppingCart
+              className="cursor-pointer"
+              size={20}
+              onClick={() => navigate("/cart")}
+            />
+            {getCartCount() > 0 && (
+              <span className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {getCartCount() > 99 ? "99+" : getCartCount()}
+              </span>
+            )}
+          </div>
+        </>
+      )}
 
       {/* Mobile Menu Toggle */}
       <button
@@ -155,32 +156,49 @@ const TopNav = () => {
           </h1>
         </div>
 
-        {navItems.map((item) => (
-          <li
-            key={item.id}
-            className="border-b border-gray-200 last:border-b-0"
-          >
-            {item.path ? (
-              <Link
-                to={item.path}
-                className={`block p-4 font-custom-medium ${
-                  location.pathname === item.path
-                    ? "bg-primary/10 text-primary"
-                    : "text-textColor hover:bg-primary/10 hover:text-primary"
-                }`}
-              >
-                {item.text}
-              </Link>
-            ) : (
-              <button
-                onClick={item.onClick}
-                className="block w-full p-4 text-left font-custom-medium text-textColor hover:bg-primary/10 hover:text-primary"
-              >
-                {item.text}
-              </button>
-            )}
-          </li>
-        ))}
+        <div className="p-4">
+          <ul className="space-y-4">
+            {navItems.map((item) => (
+              <li key={item.id}>
+                {item.onClick ? (
+                  <button
+                    onClick={item.onClick}
+                    className="text-button hover:text-buttonHover duration-300 block w-full text-left"
+                  >
+                    {item.text}
+                  </button>
+                ) : (
+                  <Link
+                    to={item.path}
+                    className={`text-button hover:text-buttonHover duration-300 block ${
+                      location.pathname === item.path ? "text-primary" : ""
+                    }`}
+                    onClick={() => setNav(false)}
+                  >
+                    {item.text}
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+
+          {/* Mobile Cart Link */}
+          <div className="mt-8 pt-4 border-t border-gray-200">
+            <Link
+              to="/cart"
+              className="flex items-center gap-2 text-button hover:text-buttonHover duration-300"
+              onClick={() => setNav(false)}
+            >
+              <FiShoppingCart size={20} />
+              <span>Cart</span>
+              {getCartCount() > 0 && (
+                <span className="bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {getCartCount() > 99 ? "99+" : getCartCount()}
+                </span>
+              )}
+            </Link>
+          </div>
+        </div>
       </ul>
     </div>
   );

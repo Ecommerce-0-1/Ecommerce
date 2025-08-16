@@ -1,10 +1,50 @@
 import React, { useState } from "react";
 import { FiStar, FiShoppingCart, FiHeart } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../../providers/CartProvider";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { addToWishlist, removeFromWishlist, checkWishlistStatus } from "../../queries/wishlistQueryFns";
+import { toast } from "react-toastify";
 
 const ProductCard = ({ product, discount }) => {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
+  const { addToCart } = useCart();
+  const queryClient = useQueryClient();
+
+  // Check if product is in wishlist
+  const { data: wishlistStatus } = useQuery({
+    queryKey: ["wishlistStatus", product.id],
+    queryFn: () => checkWishlistStatus(product.id),
+    enabled: !!product.id,
+  });
+
+  const isInWishlist = wishlistStatus?.in_wishlist || false;
+
+  // Wishlist mutations
+  const addToWishlistMutation = useMutation({
+    mutationFn: addToWishlist,
+    onSuccess: () => {
+      toast.success("Added to wishlist!");
+      queryClient.invalidateQueries(["wishlistStatus", product.id]);
+      queryClient.invalidateQueries(["userWishlist"]);
+    },
+    onError: () => {
+      toast.error("Failed to add to wishlist");
+    },
+  });
+
+  const removeFromWishlistMutation = useMutation({
+    mutationFn: removeFromWishlist,
+    onSuccess: () => {
+      toast.success("Removed from wishlist!");
+      queryClient.invalidateQueries(["wishlistStatus", product.id]);
+      queryClient.invalidateQueries(["userWishlist"]);
+    },
+    onError: () => {
+      toast.error("Failed to remove from wishlist");
+    },
+  });
 
   // Handle product click to navigate to details page
   const handleProductClick = () => {
@@ -14,19 +54,25 @@ const ProductCard = ({ product, discount }) => {
   // Handle add to cart
   const handleAddToCart = (e) => {
     e.stopPropagation(); // Prevent product click navigation
-    alert("Product added to cart!"); // Placeholder for cart functionality
+    addToCart(product, 1, discount);
   };
 
   // Handle wishlist
   const handleWishlist = (e) => {
     e.stopPropagation(); // Prevent product click navigation
-    alert("Product added to wishlist!"); // Placeholder for wishlist functionality
+    if (isInWishlist) {
+      removeFromWishlistMutation.mutate(product.id);
+    } else {
+      addToWishlistMutation.mutate(product.id);
+    }
   };
 
   // Calculate discounted price
   const originalPrice = product.price;
   const discountPercentage = discount?.discount_percentage || 0;
-  const finalPrice = discount?.final_price || originalPrice;
+  const finalPrice = isNaN(Number(discount?.final_price))
+    ? originalPrice
+    : Number(discount.final_price);
 
   // Render stars for rating
   const renderStars = (rating) => {
@@ -42,7 +88,10 @@ const ProductCard = ({ product, discount }) => {
 
     if (hasHalfStar) {
       stars.push(
-        <FiStar key="half" className="w-4 h-4 fill-yellow-400 text-yellow-400 opacity-50" />
+        <FiStar
+          key="half"
+          className="w-4 h-4 fill-yellow-400 text-yellow-400 opacity-50"
+        />
       );
     }
 
@@ -75,30 +124,47 @@ const ProductCard = ({ product, discount }) => {
         onClick={handleWishlist}
         className="absolute top-3 right-3 p-2 bg-white rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-gray-50 z-10"
       >
-        <FiHeart className="w-4 h-4 text-gray-600 hover:text-primary" />
+        <FiHeart 
+          className={`w-4 h-4 transition-colors duration-300 ${
+            isInWishlist ? "text-red-500 fill-current" : "text-gray-600 hover:text-primary"
+          }`} 
+        />
       </button>
 
       {/* Product Image */}
-      <div className="relative aspect-square overflow-hidden">
-        <img
-          src={product.img || "/api/placeholder/300/300"}
-          alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
-        
-        {/* Add to Cart Button - Shows on Hover */}
-        <div
-          className={`absolute bottom-0 left-0 right-0 bg-black bg-opacity-80 text-white py-3 px-4 transform transition-all duration-300 ${
-            isHovered ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
-          }`}
-        >
-          <button
-            onClick={handleAddToCart}
-            className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-buttonHover transition-colors duration-300 py-2 px-4 rounded-md font-medium"
+      <div className="relative bg-white border rounded-lg p-4 group transition-shadow hover:shadow-md">
+        {/* Discount Badge */}
+        {product.discount && (
+          <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded">
+            -{product.discount}%
+          </span>
+        )}
+
+        {/* Product Image */}
+        <div className="relative flex items-center justify-center aspect-square overflow-hidden bg-gray-100 rounded">
+          <img
+            src={product.img || "/api/placeholder/300/300"}
+            alt={product.name}
+            className="max-h-[90%] max-w-90%] object-contain transition-transform duration-300 group-hover:scale-105"
+          />
+
+          {/* Add to Cart Button - Shows on Hover */}
+          <div
+            className={`absolute bottom-0 left-0 right-0 bg-black bg-opacity-80 text-white py-2 px-3 transition-all duration-300 ${
+              isHovered
+                ? "translate-y-0 opacity-100"
+                : "translate-y-full opacity-0"
+            }`}
           >
-            <FiShoppingCart className="w-4 h-4" />
-            Add to Cart
-          </button>
+            <button
+              onClick={handleAddToCart}
+              disabled={product.qty <= 0}
+              className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-buttonHover disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors duration-300 py-2 px-4 rounded font-medium text-sm"
+            >
+              <FiShoppingCart className="w-4 h-4" />
+              {product.qty > 0 ? "Add to Cart" : "Out of Stock"}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -112,7 +178,7 @@ const ProductCard = ({ product, discount }) => {
         {/* Price Section */}
         <div className="flex items-center gap-2 mb-2">
           <span className="text-lg font-bold text-primary">
-            ${finalPrice.toFixed(2)}
+            ${finalPrice?.toFixed(2)}
           </span>
           {discountPercentage > 0 && (
             <span className="text-sm text-gray-500 line-through">
@@ -134,7 +200,9 @@ const ProductCard = ({ product, discount }) => {
         {/* Stock Status */}
         <div className="text-sm text-gray-500">
           {product.qty > 0 ? (
-            <span className="text-green-600">In Stock ({product.qty} available)</span>
+            <span className="text-green-600">
+              In Stock ({product.qty} available)
+            </span>
           ) : (
             <span className="text-red-600">Out of Stock</span>
           )}

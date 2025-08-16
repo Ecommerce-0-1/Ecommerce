@@ -1,6 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { FiArrowRight } from "react-icons/fi";
+import {
+  FiArrowRight,
+  FiArrowLeft,
+  FiChevronLeft,
+  FiChevronRight,
+} from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import ProductCard from "../ui/ProductCard";
 import { getDiscountedProducts } from "../../queries/discountsQueryFns";
@@ -8,18 +13,21 @@ import { Oval } from "react-loader-spinner";
 
 const FlashSales = () => {
   const navigate = useNavigate();
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [timeLeft, setTimeLeft] = useState({
     days: 3,
     hours: 23,
     minutes: 19,
-    seconds: 56
+    seconds: 56,
   });
+
+  const sliderRef = useRef(null);
 
   // Fetch discounted products
   const {
     data: discountedProductsData,
     isLoading,
-    error
+    error,
   } = useQuery({
     queryKey: ["discountedProducts"],
     queryFn: getDiscountedProducts,
@@ -29,16 +37,20 @@ const FlashSales = () => {
   // Countdown timer effect
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        const total = prev.days * 86400 + prev.hours * 3600 + prev.minutes * 60 + prev.seconds;
+      setTimeLeft((prev) => {
+        const total =
+          prev.days * 86400 +
+          prev.hours * 3600 +
+          prev.minutes * 60 +
+          prev.seconds;
         if (total <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
-        
+
         const newTotal = total - 1;
         return {
           days: Math.floor(newTotal / 86400),
           hours: Math.floor((newTotal % 86400) / 3600),
           minutes: Math.floor((newTotal % 3600) / 60),
-          seconds: newTotal % 60
+          seconds: newTotal % 60,
         };
       });
     }, 1000);
@@ -53,9 +65,36 @@ const FlashSales = () => {
 
   // Get the discounted products from API response
   const discountedProducts = discountedProductsData?.Discounted_Products || [];
-  
+
   // Limit to first 8 products for the flash sales section
   const flashSaleProducts = discountedProducts.slice(0, 8);
+
+  // Calculate slides based on screen size
+  const getSlidesPerView = () => {
+    if (typeof window !== "undefined") {
+      if (window.innerWidth >= 1280) return 4; // xl
+      if (window.innerWidth >= 1024) return 3; // lg
+      if (window.innerWidth >= 768) return 2; // md
+      return 1; // sm
+    }
+    return 4; // default
+  };
+
+  const slidesPerView = getSlidesPerView();
+  const totalSlides = Math.ceil(flashSaleProducts.length / slidesPerView);
+  const maxSlide = Math.max(0, totalSlides - 1);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => Math.min(prev + 1, maxSlide));
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => Math.max(prev - 1, 0));
+  };
+
+  const goToSlide = (slideIndex) => {
+    setCurrentSlide(slideIndex);
+  };
 
   if (isLoading) {
     return (
@@ -102,63 +141,116 @@ const FlashSales = () => {
           {/* Title and Timer */}
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8">
             <div className="flex flex-col sm:flex-row sm:items-end gap-6">
-              <h2 className="text-4xl font-bold text-textColor2">Flash Sales</h2>
-              
+              <h2 className="text-4xl font-bold text-textColor2">
+                Flash Sales
+              </h2>
+
               {/* Countdown Timer */}
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <div className="text-center">
                     <div className="text-xs text-textColor mb-1">Days</div>
                     <div className="text-2xl font-bold text-textColor2">
-                      {String(timeLeft.days).padStart(2, '0')}
+                      {String(timeLeft.days).padStart(2, "0")}
                     </div>
                   </div>
                   <span className="text-primary text-xl font-bold">:</span>
                   <div className="text-center">
                     <div className="text-xs text-textColor mb-1">Hours</div>
                     <div className="text-2xl font-bold text-textColor2">
-                      {String(timeLeft.hours).padStart(2, '0')}
+                      {String(timeLeft.hours).padStart(2, "0")}
                     </div>
                   </div>
                   <span className="text-primary text-xl font-bold">:</span>
                   <div className="text-center">
                     <div className="text-xs text-textColor mb-1">Minutes</div>
                     <div className="text-2xl font-bold text-textColor2">
-                      {String(timeLeft.minutes).padStart(2, '0')}
+                      {String(timeLeft.minutes).padStart(2, "0")}
                     </div>
                   </div>
                   <span className="text-primary text-xl font-bold">:</span>
                   <div className="text-center">
                     <div className="text-xs text-textColor mb-1">Seconds</div>
                     <div className="text-2xl font-bold text-textColor2">
-                      {String(timeLeft.seconds).padStart(2, '0')}
+                      {String(timeLeft.seconds).padStart(2, "0")}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* View All Products Button */}
-            <button
-              onClick={handleViewAllProducts}
-              className="bg-primary hover:bg-buttonHover text-white font-medium py-3 px-6 rounded-md transition-colors duration-300 flex items-center gap-2 w-fit"
-            >
-              View All Products
-              <FiArrowRight className="w-4 h-4" />
-            </button>
+            {/* Navigation and View All */}
+            <div className="flex items-center gap-4">
+              {/* Navigation Arrows */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={prevSlide}
+                  disabled={currentSlide === 0}
+                  className="p-2 rounded-full border border-gray-300 hover:border-primary hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+                >
+                  <FiChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={nextSlide}
+                  disabled={currentSlide === maxSlide}
+                  className="p-2 rounded-full border border-gray-300 hover:border-primary hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+                >
+                  <FiChevronRight className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* View All Products Button */}
+              <button
+                onClick={handleViewAllProducts}
+                className="bg-primary hover:bg-buttonHover text-white font-medium py-3 px-6 rounded-md transition-colors duration-300 flex items-center gap-2"
+              >
+                View All Products
+                <FiArrowRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Products Grid */}
+        {/* Products Slider */}
         {flashSaleProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {flashSaleProducts.map((discountData) => (
-              <ProductCard
-                key={discountData.id}
-                product={discountData.products}
-                discount={discountData}
-              />
-            ))}
+          <div className="relative">
+            {/* Slider Container */}
+            <div
+              ref={sliderRef}
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{
+                transform: `translateX(-${currentSlide * 100}%)`,
+              }}
+            >
+              {flashSaleProducts.map((discountData) => (
+                <div
+                  key={discountData.id}
+                  className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 px-3"
+                >
+                  <ProductCard
+                    product={discountData.products}
+                    discount={discountData}
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Slide Indicators */}
+            {totalSlides > 1 && (
+              <div className="flex justify-center mt-8 gap-2">
+                {Array.from({ length: totalSlides }, (_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => goToSlide(index)}
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                      currentSlide === index
+                        ? "bg-primary"
+                        : "bg-gray-300 hover:bg-gray-400"
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         ) : (
           <div className="text-center py-16">

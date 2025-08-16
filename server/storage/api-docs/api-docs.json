@@ -296,6 +296,297 @@
                 ]
             }
         },
+        "/api/payments/process": {
+            "post": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Process payment for an order",
+                "description": "Process bank card payment for an order",
+                "operationId": "d5796b4a601d3954a2a2ef8c657f54bf",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "order_id",
+                                    "card_number",
+                                    "expiry_month",
+                                    "expiry_year",
+                                    "cvv",
+                                    "billing_data"
+                                ],
+                                "properties": {
+                                    "order_id": {
+                                        "description": "Order ID",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "card_number": {
+                                        "description": "Card number",
+                                        "type": "string",
+                                        "example": "4242424242424242"
+                                    },
+                                    "expiry_month": {
+                                        "description": "Expiry month",
+                                        "type": "string",
+                                        "example": "12"
+                                    },
+                                    "expiry_year": {
+                                        "description": "Expiry year",
+                                        "type": "string",
+                                        "example": "2025"
+                                    },
+                                    "cvv": {
+                                        "description": "CVV",
+                                        "type": "string",
+                                        "example": "123"
+                                    },
+                                    "save_card": {
+                                        "description": "Save card for future use",
+                                        "type": "boolean",
+                                        "example": false
+                                    },
+                                    "billing_data": {
+                                        "properties": {
+                                            "first_name": {
+                                                "type": "string",
+                                                "example": "John"
+                                            },
+                                            "last_name": {
+                                                "type": "string",
+                                                "example": "Doe"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "example": "john@example.com"
+                                            },
+                                            "phone": {
+                                                "type": "string",
+                                                "example": "+1234567890"
+                                            },
+                                            "shipping_address": {
+                                                "type": "string",
+                                                "example": "123 Main St"
+                                            },
+                                            "shipping_city": {
+                                                "type": "string",
+                                                "example": "New York"
+                                            },
+                                            "shipping_state": {
+                                                "type": "string",
+                                                "example": "NY"
+                                            },
+                                            "shipping_postal_code": {
+                                                "type": "string",
+                                                "example": "10001"
+                                            },
+                                            "billing_address": {
+                                                "type": "string",
+                                                "example": "123 Main St"
+                                            },
+                                            "billing_city": {
+                                                "type": "string",
+                                                "example": "New York"
+                                            },
+                                            "billing_state": {
+                                                "type": "string",
+                                                "example": "NY"
+                                            },
+                                            "billing_postal_code": {
+                                                "type": "string",
+                                                "example": "10001"
+                                            },
+                                            "same_as_shipping": {
+                                                "type": "boolean",
+                                                "example": true
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Payment processed successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Payment processed successfully"
+                                        },
+                                        "payment_intent_id": {
+                                            "type": "string",
+                                            "example": "pi_1234567890"
+                                        },
+                                        "billing_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Validation failed"
+                                        },
+                                        "message": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Payment processing error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Payment processing failed"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Card declined"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/payments/saved-cards": {
+            "get": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Get user's saved payment methods",
+                "description": "Retrieve saved payment methods for the authenticated user",
+                "operationId": "d9d765db8b58e6e7bf73e138277a4a42",
+                "responses": {
+                    "200": {
+                        "description": "Saved payment methods retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Saved payment methods retrieved successfully"
+                                        },
+                                        "payment_methods": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/payments/saved-cards/{id}": {
+            "delete": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Delete saved payment method",
+                "description": "Delete a saved payment method",
+                "operationId": "772f22fd0a8328d1873cf1dd2cd505ce",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Payment method ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Payment method deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Payment method deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/products/create": {
             "post": {
                 "tags": [
@@ -695,6 +986,10 @@
         {
             "name": "Orders",
             "description": "API Endpoints for Order management"
+        },
+        {
+            "name": "Payments",
+            "description": "API Endpoints for Payment processing"
         },
         {
             "name": "Products",

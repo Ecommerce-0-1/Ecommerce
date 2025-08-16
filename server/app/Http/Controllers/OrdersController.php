@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Orders;
+use App\Models\Billing;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -136,8 +137,7 @@ class OrdersController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"billing_id","items"},
-     *             @OA\Property(property="billing_id", type="integer", example=1, description="Billing ID"),
+     *             required={"items","billing_data"},
      *             @OA\Property(
      *                 property="items",
      *                 type="array",
@@ -145,6 +145,23 @@ class OrdersController extends Controller
      *                     @OA\Property(property="product_id", type="integer", example=1),
      *                     @OA\Property(property="quantity", type="integer", example=2)
      *                 )
+     *             ),
+     *             @OA\Property(
+     *                 property="billing_data",
+     *                 type="object",
+     *                 @OA\Property(property="first_name", type="string", example="John"),
+     *                 @OA\Property(property="last_name", type="string", example="Doe"),
+     *                 @OA\Property(property="email", type="string", example="john@example.com"),
+     *                 @OA\Property(property="phone", type="string", example="+1234567890"),
+     *                 @OA\Property(property="shipping_address", type="string", example="123 Main St"),
+     *                 @OA\Property(property="shipping_city", type="string", example="New York"),
+     *                 @OA\Property(property="shipping_state", type="string", example="NY"),
+     *                 @OA\Property(property="shipping_postal_code", type="string", example="10001"),
+     *                 @OA\Property(property="billing_address", type="string", example="123 Main St"),
+     *                 @OA\Property(property="billing_city", type="string", example="New York"),
+     *                 @OA\Property(property="billing_state", type="string", example="NY"),
+     *                 @OA\Property(property="billing_postal_code", type="string", example="10001"),
+     *                 @OA\Property(property="same_as_shipping", type="boolean", example=true)
      *             )
      *         )
      *     ),
@@ -181,19 +198,54 @@ class OrdersController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'billing_id' => 'required|integer|exists:billings,id',
                 'items' => 'required|array|min:1',
                 'items.*.product_id' => 'required|integer|exists:products,id',
                 'items.*.quantity' => 'required|integer|min:1',
+                'billing_data' => 'required|array',
+                'billing_data.first_name' => 'required|string|max:255',
+                'billing_data.last_name' => 'required|string|max:255',
+                'billing_data.email' => 'required|email',
+                'billing_data.phone' => 'required|string|max:20',
+                'billing_data.shipping_address' => 'required|string|max:500',
+                'billing_data.shipping_city' => 'required|string|max:255',
+                'billing_data.shipping_state' => 'nullable|string|max:255',
+                'billing_data.shipping_postal_code' => 'required|string|max:20',
+                'billing_data.billing_address' => 'required|string|max:500',
+                'billing_data.billing_city' => 'required|string|max:255',
+                'billing_data.billing_state' => 'nullable|string|max:255',
+                'billing_data.billing_postal_code' => 'required|string|max:20',
+                'billing_data.same_as_shipping' => 'boolean',
             ]);
 
             $order = DB::transaction(function () use ($validatedData) {
                 $user = auth()->user();
                 $userId = $user ? $user->id : 14;
 
+                // Create billing information first
+                $billingData = $validatedData['billing_data'];
+                $billing = Billing::create([
+                    'first_name' => $billingData['first_name'],
+                    'last_name' => $billingData['last_name'],
+                    'email' => $billingData['email'],
+                    'phone' => $billingData['phone'],
+                    'shipping_address' => $billingData['shipping_address'],
+                    'shipping_city' => $billingData['shipping_city'],
+                    'shipping_state' => $billingData['shipping_state'] ?? null,
+                    'shipping_postal_code' => $billingData['shipping_postal_code'],
+                    'shipping_country' => $billingData['shipping_country'] ?? 'US',
+                    'billing_address' => $billingData['billing_address'],
+                    'billing_city' => $billingData['billing_city'],
+                    'billing_state' => $billingData['billing_state'] ?? null,
+                    'billing_postal_code' => $billingData['billing_postal_code'],
+                    'billing_country' => $billingData['billing_country'] ?? 'US',
+                    'payment_method' => 'card',
+                    'payment_status' => 'pending',
+                    'same_as_shipping' => $billingData['same_as_shipping'] ?? true,
+                ]);
+
                 $order = Orders::create([
                     'user_id' => $userId,
-                    'billing_id' => $validatedData['billing_id'],
+                    'billing_id' => $billing->id,
                     'status' => 'pending',
                     'total_amount' => 0
                 ]);

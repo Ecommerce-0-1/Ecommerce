@@ -4,7 +4,7 @@ const SHAPE_STYLES = {
   1: "bg-secondary_5 text-custom-3xl text-primary_2 border border-solid border-secondary_3 rounded-[53px] removeInputIcon",
   2: "bg-primary_4 text-4 text-primary_2 border border-solid border-secondary_3 rounded-custom-16 ps-6 pt-[2rem] removeInputIcon",
   // For Search 
-  3: "w-[250px] p-2 rounded-md bg-[#F5F5F5] inline-block ",
+  3: "w-[250px] p-2 rounded-md bg-[#F5F5F5] inline-block removeInputIcon ",
 };
 
 export default function CustomInput({
